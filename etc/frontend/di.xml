@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Qoliber.
+ *
+ * @category    Qoliber
+ * @package     Qoliber_OptionalTermsAndConditions
+ * @author      Jakub Winkler <jwinkler@qoliber.com
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="checkout_agreements_config_provider" xsi:type="object">Qoliber\OptionalTermsAndConditions\Model\AgreementsConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Magewire\Checkout\TermsConditions">
+        <plugin name="Qoliber_OptionalTermsAndConditions::change_mount"
+                type="Qoliber\OptionalTermsAndConditions\Plugin\HyvaCheckoutMagewireCheckoutTermsConditions"
+        />
+    </type>
+</config>

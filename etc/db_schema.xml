@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Qoliber.
+ *
+ * @category    Qoliber
+ * @package     Qoliber_OptionalTermsAndConditions
+ * @author      Jakub Winkler <jwinkler@qoliber.com
+ */
+ -->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="checkout_agreement">
+        <column xsi:type="smallint" name="is_optional" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Is Optional"/>
+    </table>
+</schema>

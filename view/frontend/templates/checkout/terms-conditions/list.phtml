@@ -1,0 +1,144 @@
+<?php
+/**
+ * Copyright © Qoliber.
+ *
+ * @category    Qoliber
+ * @package     Qoliber_OptionalTermsAndConditions
+ * @author      Jakub Winkler <jwinkler@qoliber.com
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\Magewire\Checkout\TermsConditions;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\Model\ViewModelRegistry;
+
+/** @var Template $block */
+/** @var TermsConditions $magewire */
+/** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$availableTerms = $block->getData('terms');
+?>
+<?php if (is_array($availableTerms) && count($availableTerms) !== 0): ?>
+    <div class="space-y-4">
+        <?php foreach ($availableTerms as $agreement): ?>
+            <?php $isOptional = $agreement->getData('is_optional'); ?>
+            <div x-data="{ open: false, hasError: false, isOptional: <?= $isOptional ? 'true' : 'false' ?> }"
+                 x-on:terms-conditions:details:error.window="hasError = !isOptional && ('terms' in $event.detail) &&
+                 $event.detail.terms.includes(<?= $escaper->escapeJs($agreement->getAgreementId()) ?>)"
+            >
+                <div class="flex gap-x-4">
+                    <div class="flex items-center">
+                        <input type="checkbox"
+                               class="flex-none disabled:opacity-25"
+                               id="agreement_<?= $escaper->escapeHtmlAttr($agreement->getAgreementId()) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($agreement->getMode()) ?>"
+                               wire:model="termAcceptance.<?= $escaper->escapeHtmlAttr($agreement->getAgreementId()) ?>"
+                               required
+                               x-on:input="hasError = hasError && ! $event.target.checked"
+                        />
+                    </div>
+
+                    <div class="flex-1 gap-y-2">
+                        <div class="flex justify-between items-center gap-x-4">
+                            <label for="agreement_<?= $escaper->escapeHtmlAttr($agreement->getAgreementId()) ?>" class="flex items-center">
+                            <span class="font-bold" x-bind:class="{ 'text-red-600': hasError, 'text-gray-700': ! hasError }">
+                                <?= /* @noEscape */ $agreement->getCheckboxText() ?>
+                            </span>
+                                <?php if (!$isOptional): ?>
+                                    <span class="text-red-500 ml-1">*</span>
+                                <?php endif; ?>
+                            </label>
+
+                            <button
+                                class="text-right max-w-fit"
+                                type="button"
+                                title="<?= $escaper->escapeHtmlAttr(__('Read Details')) ?>"
+                                x-on:click.prevent="$dispatch('term-dialog:open', { target: '<?= $escaper->escapeJs($agreement->getAgreementId()) ?>' })"
+                            >
+                                <span class="sr-only"><?= $escaper->escapeHtml(__('Read Details')) ?></span>
+                                <?= $heroicons->informationCircleHtml('', 28, 28, ['aria-hidden' => 'true']) ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="backdrop z-30"
+                     @term-dialog:open.window="if ($event.detail.target === '<?= $escaper->escapeJs($agreement->getAgreementId()) ?>') open = true"
+                     x-transition:enter="ease-in-out duration-500"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="ease-in-out duration-500"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     x-on:click="open = false"
+                     x-show="open"
+                     x-cloak></div>
+
+                <div role="dialog"
+                     aria-modal="true"
+                     x-on:click.outside.away="open = false"
+                     x-show="open"
+                     class="fixed inset-y-0 right-0 z-30 flex max-w-full"
+                     x-cloak
+                >
+                    <div class="relative w-screen max-w-md shadow-2xl pb-6 bg-white overflow-auto"
+                         @term-dialog:open.window="if ($event.detail.target === '<?= $escaper->escapeJs($agreement->getAgreementId()) ?>') open = true"
+                         x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+                         x-transition:enter-start="translate-x-full"
+                         x-transition:enter-end="translate-x-0"
+                         x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+                         x-transition:leave-start="translate-x-0"
+                         x-transition:leave-end="translate-x-full"
+                         x-show="open"
+                         x-cloak
+                    >
+                        <div class="flex flex-col p-6 space-y-6">
+                            <h2 class="text-gray-800 text-xl font-medium">
+                                <?php if ($agreement->getIsHtml()): ?>
+                                    <?= /** @noEscape */ $agreement->getCheckboxText(); ?>
+                                <?php else: ?>
+                                    <?= $escaper->escapeHtml($agreement->getCheckboxText()) ?>
+                                <?php endif; ?>
+                            </h2>
+
+                            <?php if ($agreement->getIsHtml()): ?>
+                                <?= /* @noEscape */ $agreement->getContent() ?>
+                            <?php else: ?>
+                                <p>
+                                    <?= $escaper->escapeHtml($agreement->getContent()) ?>
+                                </p>
+                            <?php endif ?>
+
+                            <div class="flex justify-between">
+                                <button type="button"
+                                        wire:click="$set('termAcceptance.<?= $escaper->escapeHtmlAttr($agreement->getAgreementId()) ?>', true)"
+                                        x-on:click="open = false"
+                                        class="btn btn-primary
+                                           disabled:opacity-10
+                                           disabled:cursor-not-allowed
+                                           bg-green-600 hover:bg-green-500"
+                                >
+                                    <?= $escaper->escapeHtml(__('Accept Terms')) ?>
+                                </button>
+
+                                <button type="button"
+                                        wire:click="$set('termAcceptance.<?= $escaper->escapeHtmlAttr($agreement->getAgreementId()) ?>', false)"
+                                        x-on:click="open = false"
+                                        class="btn btn-secondary"
+                                >
+                                    <?= $escaper->escapeHtml(__('Deny Terms')) ?>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach ?>
+    </div>
+<?php endif ?>

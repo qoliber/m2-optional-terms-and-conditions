@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Qoliber.
+ *
+ * @category    Qoliber
+ * @package     Qoliber_OptionalTermsAndConditions
+ * @author      Jakub Winkler <jwinkler@qoliber.com
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\CheckoutAgreements\Api\Data\AgreementInterface">
+        <attribute code="is_optional" type="string" />
+    </extension_attributes>
+</config>

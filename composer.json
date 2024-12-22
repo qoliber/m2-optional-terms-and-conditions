@@ -1,0 +1,27 @@
+{
+    "name": "qoliber/m2-optional-terms-and-conditions",
+    "version": "1.0.0",
+    "source": {
+        "type": "git",
+        "url": "git@github.com:qoliber/m2-optional-terms-and-conditions.git",
+        "reference": "master"
+    },
+    "authors": [
+        {
+            "name": "qoliber",
+            "email": "info@qoliber.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1"
+    },
+    "license": "OSL-3.0",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Qoliber\\OptionalTermsAndConditions\\": ""
+        }
+    }
+}

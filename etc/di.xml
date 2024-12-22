@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Qoliber.
+ *
+ * @category    Qoliber
+ * @package     Qoliber_OptionalTermsAndConditions
+ * @author      Jakub Winkler <jwinkler@qoliber.com
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\CheckoutAgreements\Model\AgreementsProvider">
+        <plugin name="Qoliber_OptionalTermsAndConditions::get_is_optional_terms"
+                type="Qoliber\OptionalTermsAndConditions\Plugin\CheckoutAgreementsModelAgreementsProvider"
+        />
+    </type>
+</config>

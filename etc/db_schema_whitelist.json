@@ -1,0 +1,7 @@
+{
+    "checkout_agreement": {
+        "column": {
+            "is_optional": true
+        }
+    }
+}
