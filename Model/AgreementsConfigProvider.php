@@ -15,6 +15,7 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter
     as SearchCriteriaActiveStoreAgreementsFilter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
